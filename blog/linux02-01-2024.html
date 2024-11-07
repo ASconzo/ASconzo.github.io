@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Alex Sconzo | Blog</title>
+		<link rel="stylesheet" href="../styles.css" />
+		<meta charset="UTF-8">
+		<link rel="icon" type="image/x-icon" href="../favicon.ico">
+	</head>
+
+	<body style="background-image: url(../bg/water.jpg);">
+
+		<div class="wrap">
+			<div class="sidenav">
+				<a href = "../index.html">
+					<figure class="figure">
+						<img src="../pictures/Win2k-MyComputer.png" alt="Home Icon" style="max-width:64px">
+						<figcaption>Home</figcaption>
+					</figure>
+				</a>
+				<a href = "../news.html">
+					<figure class="figure">
+						<img src="../pictures/Win2k-Internet.png" alt="News Icon" style="max-width:64px">
+						<figcaption>News</figcaption>
+					</figure>
+				</a>
+				<a href = "../about.html">
+					<figure class="figure">
+						<img src="../pictures/Win2k-About.png" alt="About Icon" style="max-width:64px">
+						<figcaption>About</figcaption>
+					</figure>
+				</a>
+				<a href = "../projects.html">
+					<figure class="figure">
+						<img src="../pictures/Win2k-Paint.png" alt="Projects Icon" style="max-width:64px">
+						<figcaption>Projects</figcaption>
+					</figure>
+				</a>
+				<a href = "../blog.html">
+					<figure class="figure">
+						<img src="../pictures/Win2k-Notepad.png" alt="Blog Icon" style="max-width:64px">
+						<figcaption>Blog</figcaption>
+					</figure>
+				</a>
+			</div>
+			
+			<div class="main">
+				<section class="bluebox" id="top">
+					<h1 style="text-align:center;">Alex Sconzo | Blog</h1>
+					<p><i><a href = "../homepage.html">Home</a> > <a href="../blog.html">Blog</a> > </i> <strong>Installing and Using Arch Linux Part 1 of 3</strong></p>
+					<hr>
+					<div>
+						<h2>Installing and Using Arch Linux -- Part 1 of 3</h2>
+						<p><i>-- 02 February 2024</i></p>
+						<hr>
+						<h3>The Decision</h3>
+						<p>
+							Approximately two months ago I took on the task of transitioning away from Windows as my daily driver to Linux. 
+							This was an action motivated by several ongoing factors in my life: A) I have become increasingly fed up with all the bloat 
+							and adware that comes installed with Windows, B) I have a deep nostalgia for late-90's/early-00's aesthetic of computers, 
+							and I had recently stumbled upon the <a href="https://github.com/grassmunk/Chicago95">Chicago95</a> Linux theme and I <em>
+							needed</em> to get my hands on it, and 3) I wanted to become proficient with Linux for my own professional development.
+						</p>
+						<p>
+							All these factors together made it clear that transitioning to Linux was the right move. 
+							So, I was faced with a decision. I could install Linux side-by-side with my exising Windows 10 installation, and I could dual-boot, 
+							or I could just completely format everything and start over with Linux.
+						</p>
+						<p>
+							The problem here is that I don't do well with half-measures -- I always slide back into my old habits. This I learned when I tried to delete my facebook 
+							and twitter accounts some years ago. At that time, I didn't want to just nuke the entire account and face the grief of losing 
+							all my likes and favorites and everything, so I would just delete the app and keep the account for peace of mind... 
+							Except I would just end up accessing the account from the web browser anyways and my obsessive, screen-staring habits would continue to proliferate.
+						</p>
+						<p>
+							So I eventually downloaded whatever backups of my data the services offered, deleted the entire account, deleted the app, and was done with it. 
+							This strategy woked really well, and I remembered this when I was deciding what to do with my Windows installation. I also asked myself "What 
+							functionality will I lose out on by uninstalling Windows entirely?", and the answer I came to was "not much". Windows is still generally the superior platform 
+							for gaming on, but I don't have time for gaming these days anyways. Outside of that, I don't really use my PC for much other than surfing the web, 
+							writing word documents, and reading emails; all of which I can do easily on a Linux machine.
+						</p>
+						<p>
+							The next question was what distribution of Linux do I want to install? I could always go for one of the big ones like Ubuntu or Fedora, 
+							those ones are supported well enough and have sufficient brand-recognition that I even knew about them without even being what I would call 
+							a "linux guy". Well, during my research I happened upon one I hadn't heard of before, but it had a cool sounding name that caught my attention: 
+							<a href="https://archlinux.org/"><em>Arch-Linux</em></a>.
+						</p>
+						<p>
+							As it turns out, Arch-Linux was exactly what I was looking for. It is essentially a DIY distro. By default, it comes with 
+							almost nothing, only the most basic drivers, no desktop environment, no applications. It has the Linux kernel,
+							it has a few necessary addons like systemd and it's package manager pacman, and elsewise you basically build it out module-by-module until you have 
+							an OS that you're happy with. This appealed to me as it met all my above-stated criteria.
+						</p>
+						<div style="max-width:75%; text-align:center; margin:auto; border:ridge gold; background-color:darkslateblue">
+						<p>
+							A)<i>"I have become increasingly fed up with all the bloat and adware that comes installed with Windows,"</i><br><br>
+							-- Unike Windows, which has been taking more and more choice away from the user and is constantly throwing things that I don't want in my face at every turn,
+							Arch <em>only</em> has what I explicitly install onto it. No more bing news feed popping up in my face whenever my mouse gets too close to the corner of my screen,
+							no more cortana search bar, no more bing search widget suddenly appearing in the middle of my desktop, no more demands to set up Windows Hello 
+							every time I turn my pc on. Just a simple pc doing what I tell it to and nothing else.
+						</p>
+						<p>
+							B)<i>"I have a deep nostalgia for late-90's/early-00's aesthetic of computers, 
+							and I had recently stumbled upon the <a href="https://github.com/grassmunk/Chicago95">Chicago95</a> Linux theme and I <em>
+							needed</em> to get my hands on it"</i><br><br>
+							-- As Arch Linux did not come with any specific desktop environment by default, I was free to determine which 
+							one I wanted for myself, so I did not have to stress about if Chicago95 would be compatible or not. I could ensure for myself that it would
+							work by installing an environment verified to be compatible.
+						</p>
+						<p> and 3)<i>"I wanted to become proficient with Linux for my own professional development"</i><br><br>
+							Well this one was obvious, installing Arch Linux necessitates use of the Linux command line, and as it is so DIY fcused, 
+							the community encourages deeply learning the OS and how it works so that you can resolve issues yourself before coming to them for help.
+						</p>
+						</div>
+						<p>
+							So by this point, I had pretty well settled on my decisions. 
+							I was going to completely wipe Windows from my device, and I would replace it with Arch-Linux.
+						</p>
+						<p>
+							Tune in next time to read about how the installation rpocess went for installing Arch, 
+							and how I troubleshooted and solved the issues that arised during the process.<br>
+							Later on, in Part 3 I will describe my post-installation customization process and 
+							I will comment on my overall thoughts on Arch-Linux and Linux in general.
+						</p>
+						<ul>
+							<li>Part 2 <i>-- Link will go here once the blog has been written</i></li>
+							<li>Part 3 <i>-- Link will go here once the blog has been written</i></li>
+						</ul>
+							
+					</div>
+				</section>
+			</div>
+
+			<div style = "width: 160px;"><!-- I'm empty!, I exist to space out the flexbox more evenly --></div>
+
+		</div>
+
+		<br><br><br>
+		<section class="bluebox">
+			<p style="text-align:center"><i>All images retrieved from the Internet. I do not claim ownership over any images used on this page. Rights are reserved by their respective owners. Content written by me, 2024</i></p>
+		</section>
+	</body>
+</html>
