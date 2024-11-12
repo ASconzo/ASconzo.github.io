@@ -99,40 +99,7 @@ body, html {
 	color:red;
 }
 
-.evilbox {
-	margin-bottom:15px;
-	padding: 15px;
-	background-image: url("bg/redskulls.jpg");
-	background-repeat: repeat;
-	border: ridge red;
-	width:100%;
-	text-align: left;
-	color: white;
-}
 
-.evilbox a{
-	color: gold;
-}
-
-.evilbox a:hover{
-	color:white;
-}
-
-.evilbox a:active{
-	color:red;
-}
-
-.evilbox hr{
-	border: 1px solid red;
-}
-
-.upgrade {
-	margin: auto;
-	background: yellow;
-	border: 2px solid gold;
-	padding: 8px;
-	margin: 8px;
-}
 
 
 
