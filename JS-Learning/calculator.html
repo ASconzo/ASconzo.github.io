@@ -44,17 +44,138 @@
 			</div>
 
 			<div class="main">
+				
+				<script>
+					const expression = [];
+					var expressionString = "0"
+					
+					function extendExpression(currentItem) {
+						expression.push(currentItem);
+						if (typeof expression.at(-1) === 'number' && typeof expression.at(-2) == 'number'){
+							let newNum = String(expression.at(-2));
+							newNum = newNum + expression.at(-1);
+							newNum = Number(newNum);
+							expression.pop(); expression.pop();
+							expression.push(newNum);
+						}else if (typeof expression.at(-1) === 'number' && expression.at(-2) === '.'){
+							let newNum = String(expression.at(-2));
+							newNum = newNum + expression.at(-1);
+							expression.pop(); expression.pop();
+							expression.push(newNum);
+							/*if (typeof expression.at(-2) === 'number' && expression.at(-1) == 0){
+								let newNum = String(expression.at(-2));
+								newNum = newNum + expression.at(-1);
+								newNum = Number(newNum).toFixed(1);
+								expression.pop(); expression.pop();
+								expression.push(newNum);
+							}else */if(typeof expression.at(-2) === 'number'){
+								let newNum = String(expression.at(-2));
+								newNum = newNum + expression.at(-1);
+								newNum = Number(newNum);
+								expression.pop(); expression.pop();
+								expression.push(newNum);
+							}else{
+								let newNum = String(0);
+								newNum = newNum + expression.at(-1);
+								newNum = Number(newNum);
+								expression.pop(); expression.pop();
+								expression.push(newNum);
+							}
+								
+						}
+						expressionString = expression.join(" ");
+						document.getElementById("calcSpace").innerHTML = expressionString;
+					}
+					function resetExpression(){
+						expression.splice(0,expression.length);
+						expressionString = "Use the buttons below to enter your commands!";
+						document.getElementById("calcSpace").innerHTML = expressionString;
+					}
+				</script>
+				
 				<section class="bluebox" id="top">
-					<h1 style="text-align:center;">Alex Sconzo | projects</h1>
-					<p><i><a href = "../homepage.html">Home</a> > <a href="../projects.html">Projects</a> > <a href="./index.html">Javascript learning</a> > </i> <strong>Project Title</strong></p>
+					<h1 style="text-align:center;">Alex Sconzo | Projects</h1>
+					<p><i><a href = "../homepage.html">Home</a> > <a href="../projects.html">Projects</a> > <a href="./index.html">Javascript learning</a> > </i> <strong>Javascript Calculator</strong></p>
 					<hr>
 					<div>
-						<h2>project Title</h2>
+						<h2>Javascript Calculator</h2>
 						<hr>
-						<p>
-							content
-						</p>
+						<style>
+							.grid-container{
+								display: grid;
+								grid-template-columns: auto auto auto auto auto;
+								gap: 10px;
+								background-color: rgb(0, 163, 225);
+								padding: 10px;
+								border: ridge gold;
+							}
+							.grid-container > button {
+								background-color: rgb(0,103,165);
+								border: ridge gold;
+								text-align: center;
+								font-size: 30px;
+								color: inherit;
+							}
+							.grid-container > button:hover{
+								background-color:#fff7cc;
+								color:black;
+								cursor: pointer;
+							}
+							.grid-container >button:active{
+								background-color:gold;
+								border: inset gold;
+							}
+							#calcSpace{
+								grid-column: 1/6;
+							}
+							
+						</style>
+						<div class="grid-container">
+							<div id="calcSpace" style="background-color: white; border: ridge gold; color:black; text-align:left; font-size: 30px;">Use the buttons below to enter your commands!</div>
+							<button type="button" onclick="extendExpression(1)">1</button>
+							<button type="button" onclick="extendExpression(2)">2</button>
+							<button type="button" onclick="extendExpression(3)">3</button>
+							<button type="button" onclick="extendExpression('+')">+</button>
+							<button type="button" onclick="extendExpression('^')">^</button>
+							<button type="button" onclick="extendExpression(4)">4</button>
+							<button type="button" onclick="extendExpression(5)">5</button>
+							<button type="button" onclick="extendExpression(6)">6</button>
+							<button type="button" onclick="extendExpression('-')">-</button>
+							<button type="button" onclick="extendExpression('(')">(</button>
+							<button type="button" onclick="extendExpression(7)">7</button>
+							<button type="button" onclick="extendExpression(8)">8</button>
+							<button type="button" onclick="extendExpression(9)">9</button>
+							<button type="button" onclick="extendExpression('*')">*</button>
+							<button type="button" onclick="extendExpression(')')">)</button>
+							<button type="button" id="clear" style="background-color:indianred"
+									onclick="resetExpression()">C</button>
+							<button type="button" onclick="extendExpression(0)">0</button>
+							<button type="button" onclick="extendExpression('.')">.</button>
+							<button type="button" onclick="extendExpression('/')">/</button>
+							<button type="button" id="equals" style="background-color:green"
+									onclick="extendExpression('Not implemented yet!')">=</button>
+						</div>
+							
 					</div>
+					<p>
+						This is a simple calculator programmed in Javascript.
+					</p>
+					<ul>Finished:
+						<li>Build the layout and make it pretty</li>
+						<li>Make the buttons print to the solution box</li>
+						<li>Make subsequent integer button presses append value to previous int instead adding a new block to the main array</li>
+					</ul>
+					<ul>To do:
+						<li>Finish programming the decimal button. It doesn't play nice with the 0 button currently.</li>
+						<li>Implement the equals button</li>
+						<li>Implement the basic operators</li>
+						<li>Implement parentheticals</li>
+						<li>Implement the show work functions</li>
+						<li>Add code section to the page to display my javascript logic</li>
+					</ul>
+					
+					
+					
 				</section>
 			</div>
 
@@ -64,7 +185,7 @@
 
 		<br><br><br>
 		<section class="bluebox">
-			<p style="text-align:center"><i>All images retrieved from the Internet. I do not claim ownership over any images used on this page. Rights are reserved by their respective owners. Content written by me, 2024</i></p>
+			<p style="text-align:center"><i>All images retrieved from the Internet, except for the ones created by me. I do not claim ownership over any images used on this page, except for the ones created by me. Rights are reserved by their respective owners. Content written by me, 2024</i></p>
 		</section>
 	</body>
 </html>
