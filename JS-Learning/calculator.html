@@ -7,7 +7,7 @@
 		<link rel="icon" type="image/x-icon" href="../favicon.ico">
 	</head>
 
-	<body style="background-image: url(../bg/water.jpg);">
+	<body>
 
 		<div class="wrap">
 			<div class="sidenav">
@@ -47,49 +47,69 @@
 				
 				<script>
 					const expression = [];
-					var expressionString = "0"
+					var expressionString = "";
 					
 					function extendExpression(currentItem) {
-						expression.push(currentItem);
-						if (typeof expression.at(-1) === 'number' && typeof expression.at(-2) == 'number'){
-							let newNum = String(expression.at(-2));
-							newNum = newNum + expression.at(-1);
-							newNum = Number(newNum);
-							expression.pop(); expression.pop();
-							expression.push(newNum);
-						}else if (typeof expression.at(-1) === 'number' && expression.at(-2) === '.'){
-							let newNum = String(expression.at(-2));
-							newNum = newNum + expression.at(-1);
-							expression.pop(); expression.pop();
-							expression.push(newNum);
-							/*if (typeof expression.at(-2) === 'number' && expression.at(-1) == 0){
-								let newNum = String(expression.at(-2));
-								newNum = newNum + expression.at(-1);
-								newNum = Number(newNum).toFixed(1);
-								expression.pop(); expression.pop();
-								expression.push(newNum);
-							}else */if(typeof expression.at(-2) === 'number'){
-								let newNum = String(expression.at(-2));
-								newNum = newNum + expression.at(-1);
-								newNum = Number(newNum);
-								expression.pop(); expression.pop();
-								expression.push(newNum);
-							}else{
-								let newNum = String(0);
-								newNum = newNum + expression.at(-1);
-								newNum = Number(newNum);
-								expression.pop(); expression.pop();
-								expression.push(newNum);
-							}
-								
-						}
-						expressionString = expression.join(" ");
+						expressionString = expressionString + currentItem;
 						document.getElementById("calcSpace").innerHTML = expressionString;
 					}
+					
+					function isNumber(character) {
+						if (character === '0'){
+							return true;
+						}else if (character === '0'){
+							return true;
+						}else if (character === '1'){
+							return true;
+						}else if (character === '2'){
+							return true;
+						}else if (character === '3'){
+							return true;
+						}else if (character === '4'){
+							return true;
+						}else if (character === '5'){
+							return true;
+						}else if (character === '6'){
+							return true;
+						}else if (character === '7'){
+							return true;
+						}else if (character === '8'){
+							return true;
+						}else if (character === '9'){
+							return true;
+						}else if (character === '.'){
+							return true;
+						}else {
+							return false;
+						}
+						
+					}
+					
+					function evaluateExpression(){
+						//Part 1: Turn it into an array of items
+						var tempString = "";
+						for (let item of expressionString){
+							if (isNumber(item)){
+								tempString = tempString + item;
+							}else{
+								expression.push(tempString);
+								tempstring = "";
+								expression.push(item);
+								
+							}expression.push(tempString); tempString = '';
+							
+						}
+						extendExpression("\n" + expression);
+						
+						//Part 2: 
+					}
+					
+					
+					
 					function resetExpression(){
 						expression.splice(0,expression.length);
-						expressionString = "Use the buttons below to enter your commands!";
-						document.getElementById("calcSpace").innerHTML = expressionString;
+						expressionString = "";
+						document.getElementById("calcSpace").innerHTML = "Use the buttons below to enter your commands!";
 					}
 				</script>
 				
@@ -132,28 +152,28 @@
 						</style>
 						<div class="grid-container">
 							<div id="calcSpace" style="background-color: white; border: ridge gold; color:black; text-align:left; font-size: 30px;">Use the buttons below to enter your commands!</div>
-							<button type="button" onclick="extendExpression(1)">1</button>
-							<button type="button" onclick="extendExpression(2)">2</button>
-							<button type="button" onclick="extendExpression(3)">3</button>
+							<button type="button" onclick="extendExpression('1')">1</button>
+							<button type="button" onclick="extendExpression('2')">2</button>
+							<button type="button" onclick="extendExpression('3')">3</button>
 							<button type="button" onclick="extendExpression('+')">+</button>
 							<button type="button" onclick="extendExpression('^')">^</button>
-							<button type="button" onclick="extendExpression(4)">4</button>
-							<button type="button" onclick="extendExpression(5)">5</button>
-							<button type="button" onclick="extendExpression(6)">6</button>
+							<button type="button" onclick="extendExpression('4')">4</button>
+							<button type="button" onclick="extendExpression('5')">5</button>
+							<button type="button" onclick="extendExpression('6')">6</button>
 							<button type="button" onclick="extendExpression('-')">-</button>
 							<button type="button" onclick="extendExpression('(')">(</button>
-							<button type="button" onclick="extendExpression(7)">7</button>
-							<button type="button" onclick="extendExpression(8)">8</button>
-							<button type="button" onclick="extendExpression(9)">9</button>
+							<button type="button" onclick="extendExpression('7')">7</button>
+							<button type="button" onclick="extendExpression('8')">8</button>
+							<button type="button" onclick="extendExpression('9')">9</button>
 							<button type="button" onclick="extendExpression('*')">*</button>
 							<button type="button" onclick="extendExpression(')')">)</button>
 							<button type="button" id="clear" style="background-color:indianred"
 									onclick="resetExpression()">C</button>
-							<button type="button" onclick="extendExpression(0)">0</button>
+							<button type="button" onclick="extendExpression('0')">0</button>
 							<button type="button" onclick="extendExpression('.')">.</button>
 							<button type="button" onclick="extendExpression('/')">/</button>
 							<button type="button" id="equals" style="background-color:green"
-									onclick="extendExpression('Not implemented yet!')">=</button>
+									onclick="evaluateExpression()">=</button>
 						</div>
 							
 					</div>
