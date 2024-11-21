@@ -46,7 +46,6 @@
 			<div class="main">
 				
 				<script>
-					const expression = [];
 					var expressionString = "";
 					
 					function extendExpression(currentItem) {
@@ -85,32 +84,126 @@
 						
 					}
 					
-					function evaluateExpression(){
-						//Part 1: Turn it into an array of items
+					function stringToExpression(stringInput){
+						var newExpression = [];
 						var tempString = "";
-						for (let item of expressionString){
+						for (let item of stringInput){
 							if (isNumber(item)){
 								tempString = tempString + item;
 							}else{
-								expression.push(tempString);
-								tempstring = "";
-								expression.push(item);
-								
-							}expression.push(tempString); tempString = '';
-							
+								newExpression.push(tempString);
+								tempString = "";
+								newExpression.push(item);
+							}
 						}
-						extendExpression("\n" + expression);
+						newExpression.push(tempString); tempString = '';
+						return newExpression;
+					}
+					
+					function evaluateExpression(expressionToBeEvaluated, leftArray, rightArray){
+						var expression = expressionToBeEvaluated;
+						//Part 1: Turn it into an array of items
+						var finalAnswer;
 						
-						//Part 2: 
+						newLine = "<br> = [" + expression.join(" ") + "]";
+						extendExpression(newLine);
+						
+						//Part 1.5: Process parenthicals
+						for(var i=0; i<expression.length; i++){
+							var leftParenIndex = -1;
+							var rightParenIndex = -1;
+							leftParenIndex = expression.lastIndexOf("(");
+							rightParenIndex= expression.indexOf(")", leftParenIndex);
+							if (leftParenIndex != -1){
+								var removalLength = rightParenIndex - leftParenIndex + 1;
+								var parentheticalExpression = expression.slice(leftParenIndex + 1, rightParenIndex);
+								var leftArray = [];
+								var rightArray = [];
+								console.log(parentheticalExpression);
+								parentheticalExpression = evaluateExpression(parentheticalExpression, leftArray, rightArray);
+								expression.splice(leftParenIndex, removalLength, parentheticalExpression);
+								i = 0;
+							}
+						}
+							//expression
+						
+						//Part 2: Evaluate math
+						
+						//Part 2.1: Evaluate exponents
+						for(var i=0; i<expression.length; i++){
+							if (expression[i] == "^"){
+								var a = parseFloat(expression[i-1]);
+								var b = parseFloat(expression[i+1]);
+								console.log(a,b);
+								var answer = Math.pow(a, b);
+								expression.splice(i-1, 3, answer);
+								newLine = "<br> = [" + expression.join(" ") + "]";
+								extendExpression(newLine);
+								i = 0;
+								
+							}
+						}
+						
+						console.log(expression);
+							
+						//Part 2.2 Evaluate multiplication and Division
+						for(var i=0; i<expression.length; i++){
+							if (expression[i] == "*"){
+								var a = parseFloat(expression[i-1]);
+								var b = parseFloat(expression[i+1]);
+								console.log(a,b);
+								var product = a*b;
+								expression.splice(i-1, 3, product);
+								newLine = "<br> = [" + expression.join(" ") + "]";
+								extendExpression(newLine);
+								i = 0;
+								
+							}
+							if (expression[i] == "/"){
+								var a = parseFloat(expression[i-1]);
+								var b = parseFloat(expression[i+1]);
+								var quotient = a/b;
+								expression.splice(i-1, 3, quotient);
+								newLine = "<br> = [" + expression.join(" ") + "]";
+								extendExpression(newLine);
+								i = 0;
+							}
+						}
+						console.log(expression);
+						
+						//Part 2.3: Evaluate addition and subtraction
+						for(var i=0; i<expression.length; i++){
+							if (expression[i] == "+"){
+								var a = parseFloat(expression[i-1]);
+								var b = parseFloat(expression[i+1]);
+								console.log(a,b);
+								var sum = a+b;
+								expression.splice(i-1, 3, sum);
+								newLine = "<br> = [" + expression.join(" ") + "]";
+								extendExpression(newLine);
+								i = 0;
+							}
+							if (expression[i] == "-"){
+								var a = parseFloat(expression[i-1]);
+								var b = parseFloat(expression[i+1]);
+								var difference = a-b;
+								expression.splice(i-1, 3, difference);
+								newLine = "<br> = [" + expression.join(" ") + "]";
+								extendExpression(newLine);
+								i = 0;
+							}
+						}
+						return finalAnswer;
 					}
 					
 					
 					
 					function resetExpression(){
-						expression.splice(0,expression.length);
 						expressionString = "";
 						document.getElementById("calcSpace").innerHTML = "Use the buttons below to enter your commands!";
 					}
+					
+					function doNothing(){}
 				</script>
 				
 				<section class="bluebox" id="top">
@@ -161,19 +254,19 @@
 							<button type="button" onclick="extendExpression('5')">5</button>
 							<button type="button" onclick="extendExpression('6')">6</button>
 							<button type="button" onclick="extendExpression('-')">-</button>
-							<button type="button" onclick="extendExpression('(')">(</button>
+							<button style="cursor: not-allowed" type="button" onclick="extendExpression('(')">(</button>
 							<button type="button" onclick="extendExpression('7')">7</button>
 							<button type="button" onclick="extendExpression('8')">8</button>
 							<button type="button" onclick="extendExpression('9')">9</button>
 							<button type="button" onclick="extendExpression('*')">*</button>
-							<button type="button" onclick="extendExpression(')')">)</button>
+							<button style="cursor:not-allowed" type="button" onclick="extendExpression(')')">)</button>
 							<button type="button" id="clear" style="background-color:indianred"
 									onclick="resetExpression()">C</button>
 							<button type="button" onclick="extendExpression('0')">0</button>
 							<button type="button" onclick="extendExpression('.')">.</button>
 							<button type="button" onclick="extendExpression('/')">/</button>
 							<button type="button" id="equals" style="background-color:green"
-									onclick="evaluateExpression()">=</button>
+									onclick="evaluateExpression(stringToExpression(expressionString),[],[])">=</button>
 						</div>
 							
 					</div>
