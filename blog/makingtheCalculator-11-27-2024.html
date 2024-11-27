@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Alex Sconzo | Projects</title>
+		<link rel="stylesheet" href="../styles.css" />
+		<meta charset="UTF-8">
+		<link rel="icon" type="image/x-icon" href="../favicon.ico">
+	</head>
+
+	<body>
+
+		<div class="wrap">
+			<div class="sidenav">
+				<a href = "../index.html">
+					<figure class="figure">
+						<img src="../pictures/Win2k-MyComputer.png" alt="Home Icon" style="max-width:64px">
+						<figcaption>Home</figcaption>
+					</figure>
+				</a>
+				<a href = "../news.html">
+					<figure class="figure">
+						<img src="../pictures/Win2k-Internet.png" alt="News Icon" style="max-width:64px">
+						<figcaption>News</figcaption>
+					</figure>
+				</a>
+				<a href = "../about.html">
+					<figure class="figure">
+						<img src="../pictures/Win2k-About.png" alt="About Icon" style="max-width:64px">
+						<figcaption>About</figcaption>
+					</figure>
+				</a>
+				<a href = "../projects.html">
+					<figure class="figure">
+						<img src="../pictures/Win2k-Paint.png" alt="Projects Icon" style="max-width:64px">
+						<figcaption>Projects</figcaption>
+					</figure>
+				</a>
+				<a href = "../blog.html">
+					<figure class="figure">
+						<img src="../pictures/Win2k-Notepad.png" alt="Blog Icon" style="max-width:64px">
+						<figcaption>Blog</figcaption>
+					</figure>
+				</a>
+			</div>
+
+			<div class="main">
+				<section class="bluebox" id="top">
+					<h1 style="text-align:center;">Alex Sconzo | projects</h1>
+					<p><i><a href = "../homepage.html">Home</a> > <a href="../blog.html">Blog</a> > </i> <strong>Making of: The Calculator</strong></p>
+					<hr>
+					<div>
+						<h2>Making of: The Calculator</h2>
+						<p><i>-- 27 November 2024</i></p>
+						<hr>
+						<p>
+							In order to become the best that I can be, it is not sufficient to sit around and read books and learn theory. I must also dive down deep into the weeds and actually do something. This calculator project was an effort to familiarize myself with the basics of Javascript and how it integrates into web pages. The design goal is simple: implement a feature-complete calculator and embed it inot my webpage.
+						</p>
+						<figure class="figure" style="border: ridge gold; float:right;">
+							<img src="./blogpics/calcScreen.jpg" alt="A screenshot of the calculator">
+							<figcaption>A screenshot of the calculator</figcaption>
+						</figure>
+						<p> <a href = "../JS-Learning/calculator.html">Here is the link to the project</a>. Check it out! If anything shows up as NaN (Not a Number), then thats because you put in an impossible equation.
+						</p>
+						<h3><strong>The Features:</strong></h3>
+						<p>One of the most surprising aspects of this project was just how many features a basic calculator has. While I was building it out, I would continually discover new features that I needed to add.</p>
+						<p><strong>Overall Structure:</strong> the overall flow of the calculator is this: When you are hitting the buttons, youre actually just constructing a string. You can keep going, and you can build this string out to be as long as you like. However, when you hit the <strong>=</strong> button, it actually starts processing through the string.<br>
+							The first step, is it walks through the string character-by-character and places each consecutive character into an array. This array is called <strong>expression</strong>. For some reason, sometimes it likes to add empty spaces into the array too sometimes. I never was able to figure out why it does this, but I just added an extra step where it goes through again and emoves them all. Easy peasy.</p>
+						<p>This calculator follows standard mathemtical order of operations. You may remember it as <strong>PEMDAS</strong>: (Parentheses, exponents, multiplication & division, addition & subtraction). Basically, it will walk through <strong>expression</strong> several times, once for each step in PEMDAS, and it will make any necessary calculations then. If everything works right, then it will continually wittle down <strong>expression</strong> until it is just a measly little single number.</p>
+						<figure class="figure" style="border: ridge gold; float:right;">
+							<img src="./blogpics/calc2.jpg" alt="The results of an expression with nested parentheses.">
+							<figcaption>The results of an expression with nested parentheses.</figcaption>
+						</figure>
+						<p><strong>Parentheses:</strong> This section was by far the most difficult. Firstly, it walks through <strong>expression</strong> and it looks for any numbers that are sitting next to a parenthesis, like so: 5(1+1), and it inserts a multiplication sign in between and it turns it to 5*(1+1), so that the five wil distribute into the parenthesis. This also works for adjacent parentheses. So for example: 5(1+1)6 --> 5*(1+1)*6.</p>
+						<p>The next step is that it looks for any single number within a set parentheses, and it drops the parentheses. So (15) will become just 15.</p>
+						<p>Then it needs to actually solve any expressions contained within a set of parentheses. It does this recusively. All of the logic for processing an equation is contained an a function <em>EvaluateExpression()</em>. When a portion of the expression is contained within a set of parentheses, then I recursively call <em>evaluateExpression()</em> on the inner contained bounded by the parentheses, until I have the complete answer, then I return that final answer, and replace the inner contents of the parentheses with that answer, and I drop the parentheses. if that all sounds convoluted, that's because it is, and it took a long time and lot of trial and error to get it working reliably.</p>
+						<p>It can even handle nested parentheses too. The logic for this is that first, <em>evaluateExpression()</em> will look for the <em>last</em> lefthand parenthesis ("(") in the equation, and then finds the <em>first</em> righthand parenthesis (")") that follows. This will find the deepest pair of nested parentheses, and it will solve that section first. Then it goes back to the beginning and starts over again, continually solving the deepest nested set of parentheses, until there are none left. Then it can just follow the rest of the order of operations, which is the easy part.
+						<p><strong>Exponents:</strong> This section was easy. It just walks through the equation lookiing for a "^". When it finds one, it just maths out the previous value ^ the following value. It uses the built in Math.pow() function to do this. Since by this point, there are no parentheses left, if I have something like (5+1)^2, it will correctly resolve to 6^2.</p>
+						<p><strong>Multiplication and Division:</strong> This one was also easy and it pretty much follows the same logic as the above section on exponents. It just goes from left to right resolving each * or / operation it finds.</p>
+						<p><strong>Addition and Subtraction:</strong> Same as above, but with + and - instead of * and /.</p>
+						<p><strong>Other Odd things:</strong> One issue I was running into was with decimals. One feature javascript has, is that it will automatically resolve a decimal value to an integer, if it can. So 1.0 will automatically convert itself to just 1. So the issue was that, as the user is inputting their number, I was opriginally converting their input to a number as they hit buttons, and this automatic decimal to integer conversion was preventing the user from inputting, say 1.01, as it would just convert it back to 1 while they were typing. this was eventually solved by just keeping everything as a string until any logic is actually being performed on it.</p>
+						<p>Another odd issue is if somebody wanted to input a negative number, so like 5+-1. This needs to resolve to 5-1. So I had to create another step that just looks through the equation looking for instances of this, and correcting them.
+					</div>
+					<h3>Final Thoughts</h3>
+					<p>This was a really fun project to work on! It feels really nice having these tangible problems in front of me, and then working out real solutions to them. I think there may be some unintended output that occurs if the user goes off script, but I am okay with that. I can just say its the user's fault for trying to perform impossible math. I have some ideas on my next project too, so stay tuned.</p>
+				</section>
+			</div>
+
+			<div style = "width: 160px;"><!-- I'm empty!, I exist to space out the flexbox more evenly --></div>
+
+		</div>
+
+		<br><br><br>
+		<section class="bluebox">
+			<p style="text-align:center"><i>All images retrieved from the Internet, except for the ones I took myself. I do not claim ownership over any images used on this page, except for the ones I took myself. Rights are reserved by their respective owners. Content written by me, 2024</i></p>
+		</section>
+	</body>
+</html>

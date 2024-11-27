@@ -78,7 +78,9 @@
 							return true;
 						}else if (character === '.'){
 							return true;
-						}else {
+						/*}else if (Number.isNaN(character) === false){
+							return true;
+						*/}else {
 							return false;
 						}
 						
@@ -102,99 +104,337 @@
 					
 					function evaluateExpression(expressionToBeEvaluated, leftArray, rightArray){
 						var expression = expressionToBeEvaluated;
-						//Part 1: Turn it into an array of items
-						var finalAnswer;
+						var left = leftArray;
+						var right = rightArray;
 						
-						newLine = "<br> = [" + expression.join(" ") + "]";
-						extendExpression(newLine);
+						while (expression.length > 1){
+							//Part 1: Turn it into an array of items
 						
-						//Part 1.5: Process parenthicals
-						for(var i=0; i<expression.length; i++){
-							var leftParenIndex = -1;
-							var rightParenIndex = -1;
-							leftParenIndex = expression.lastIndexOf("(");
-							rightParenIndex= expression.indexOf(")", leftParenIndex);
-							if (leftParenIndex != -1){
-								var removalLength = rightParenIndex - leftParenIndex + 1;
-								var parentheticalExpression = expression.slice(leftParenIndex + 1, rightParenIndex);
-								var leftArray = [];
-								var rightArray = [];
-								console.log(parentheticalExpression);
-								parentheticalExpression = evaluateExpression(parentheticalExpression, leftArray, rightArray);
-								expression.splice(leftParenIndex, removalLength, parentheticalExpression);
-								i = 0;
+							newLine = "<br> = " + left.join(" ") + expression.join(" ") + right.join(" ");
+							extendExpression(newLine);
+							console.log("Input array:");
+							console.log(expression);
+						
+						
+							//Part 0: Removing empty spaces
+							//Not sure why these are appearing, but I can't figure that out so I'll just eliminate them instead
+						
+							console.log("Scanning for empty spaces in the array.");
+							for (var i=0; i<expression.length; i++){
+								var loopNum = i+1;
+								console.log("Loop # " + loopNum + " out of " + expression.length);
+								if (expression[i] === ""){
+									console.log("Empty space found:");
+									console.log("Eliminating empty space...");
+									console.log("Before:");
+									console.log(expression);
+									expression.splice(i,1);
+									console.log("After:");
+									console.log(expression); 
+									console.log("Recalculating loops...");
+									i=-1;
+								}
 							}
-						}
-							//expression
-						
-						//Part 2: Evaluate math
-						
-						//Part 2.1: Evaluate exponents
-						for(var i=0; i<expression.length; i++){
-							if (expression[i] == "^"){
-								var a = parseFloat(expression[i-1]);
-								var b = parseFloat(expression[i+1]);
-								console.log(a,b);
-								var answer = Math.pow(a, b);
-								expression.splice(i-1, 3, answer);
-								newLine = "<br> = [" + expression.join(" ") + "]";
-								extendExpression(newLine);
-								i = 0;
-								
+							//Part 1: Process parentheticals
+							//Part 1.1: Add multiplication signs before and after parentheticals
+							console.log("Adding multiplication signs around parentheticals");
+							for (var i=0; i<expression.length; i++){
+								var loopNum = i+1;
+								console.log("Loop # " + loopNum + " out of " + expression.length);
+								if (expression[i] === "(" && isNumber(expression[i-1])){
+									console.log("Left parenthetical multiplication found:");
+									console.log("Adding * before parenthesis...");
+									console.log("Before:");
+									console.log(expression);
+									expression.splice(i, 0, "*");
+									newLine = "<br> = " + left.join(" ") + expression.join(" ") + right.join(" ");
+									console.log("After:");
+									console.log(expression);
+									console.log("Recalculating loops...");
+									i=-1;
+									extendExpression(newLine);
+								}
+								if (expression[i] === ")" && isNumber(expression[i+1])){
+									console.log("Right parenthetical multiplication found:");
+									console.log("Adding * after parenthesis...");
+									console.log("Before:");
+									console.log(expression);
+									expression.splice(i+1, 0, "*");
+									newLine = "<br> = " + left.join(" ") + expression.join(" ") + right.join(" ");
+									console.log("After:");
+									console.log(expression);
+									console.log("Recalculating loops...");
+									i=-1;
+									extendExpression(newLine);
+								}
+								if (expression[i] === ")" && expression[i+1] === "("){
+									console.log("Neighboring parentheticals found:");
+									console.log("Adding * after parenthesis...");
+									console.log("Before:");
+									console.log(expression);
+									expression.splice(i+1, 0, "*");
+									newLine = "<br> = " + left.join(" ") + expression.join(" ") + right.join(" ");
+									console.log("After:");
+									console.log(expression);
+									console.log("Recalculating loops...");
+									i=-1;
+									extendExpression(newLine);
+								}
 							}
-						}
+							console.log("Finished adding multiplication signs around parentheticals.");
+							console.log(expression);
 						
-						console.log(expression);
+							//Part 1.2: Removing parentheticals from single items
+							console.log("Removing Parentheticals from single items:");
+							for (var i=0; i<expression.length; i++){
+								var loopNum = i+1;
+								console.log("Loop # " + loopNum + " out of " + expression.length);
+								if (expression[i-1] === "(" && expression[i+1] === ")"){
+									console.log("Single item within set of parenthesis found:");
+									console.log("Removing parenthesis from item...");
+									console.log("Before:");
+									console.log(expression);
+									var innerValue = expression[i];
+									expression.splice(i-1, 3, innerValue);
+									newLine = "<br> = " + left.join(" ") + expression.join(" ") + right.join(" ");
+									console.log("After:");
+									console.log(expression);
+									console.log("Recalculating loops...");
+									i=-1;
+									extendExpression(newLine);
+								}
+							}
+							console.log("Finished removing parentheses from single items");
+							console.log(expression);
+						
+							//Part 1.3: Process parenthicals
+							console.log("Processing math inside the parentheticals:");
+							for(var i=0; i<expression.length; i++){
+								var loopNum = i+1;
+								console.log("Loop # " + loopNum + " out of " + expression.length);
+								//Locate indexes of left and right parentheticals. Will be -1 if there is none
+								var leftParenIndex = expression.lastIndexOf("(");
+								var rightParenIndex= expression.indexOf(")", leftParenIndex);
+								if (leftParenIndex != -1){
+									console.log("Section contained within parentheticals found.");
+									var removalLength = rightParenIndex - leftParenIndex + 1;
+									var parentheticalExpression = expression.slice(leftParenIndex + 1, rightParenIndex);
+									var leftArray = expression.slice(0, leftParenIndex+1);
+									console.log("Left array: " + leftArray);
+									var rightArray = expression.slice(rightParenIndex);
+									console.log("Right array: " + rightArray);
+									console.log("Middle array: " + parentheticalExpression);
+									console.log("Solving parenthetical section");
+									console.log("Before:");
+									console.log(parentheticalExpression);
+									var newArray = evaluateExpression(parentheticalExpression, leftArray, rightArray);
+									console.log("Parenthetical section solved.");
+									console.log("After:");
+									console.log(newArray);
+									console.log("Replacing old parenthetical section with answer.");
+									console.log("Before:");
+									console.log(expression);
+									expression.splice(leftParenIndex,removalLength, newArray[i]);
+									left = [];
+									right = [];
+									newLine = "<br> = " + left.join("") + expression.join(" ") + right.join("");
+									console.log("After:");
+									console.log(expression);
+									i = -1;
+								}
+							}
 							
-						//Part 2.2 Evaluate multiplication and Division
-						for(var i=0; i<expression.length; i++){
-							if (expression[i] == "*"){
-								var a = parseFloat(expression[i-1]);
-								var b = parseFloat(expression[i+1]);
-								console.log(a,b);
-								var product = a*b;
-								expression.splice(i-1, 3, product);
-								newLine = "<br> = [" + expression.join(" ") + "]";
-								extendExpression(newLine);
-								i = 0;
+							//Part 1.4: Removing parentheticals from single items again
+							console.log("Removing Parentheticals from single items again:");
+							for (var i=0; i<expression.length; i++){
+								var loopNum = i+1;
+								console.log("Loop # " + loopNum + " out of " + expression.length);
+								if (expression[i-1] === "(" && expression[i+1] === ")"){
+									console.log("Single item within set of parenthesis found:");
+									console.log("Removing parenthesis from item...");
+									console.log("Before:");
+									console.log(expression);
+									var innerValue = expression[i];
+									expression.splice(i-1, 3, innerValue);
+									newLine = "<br> = " + left.join(" ") + expression.join(" ") + right.join(" ");
+									console.log("After:");
+									console.log(expression);
+									console.log("Recalculating loops...");
+									i=-1;
+									extendExpression(newLine);
+								}
+							}
+							console.log("Finished removing parentheses from single items");
+							console.log(expression);
+
+							//Part 2: Evaluate math
+							
+							//Part 2.0: Check for negative numbers
+							console.log("Checking for the input of negative numbers");
+							for (var i=0; i<expression.length; i++){
+								var loopNum = i+1;
+								console.log("Loop # " + loopNum + " out of " + expression.length);
+								if (expression[i] === "-"){
+									if (expression[i-1] === "-"){
+										console.log("Negative number found... Making correction...");
+										console.log("Before:");
+										console.log(expression);
+										expression.splice(i-1, 2, "+");
+										newLine = "<br> = " + left.join(" ") + expression.join(" ") + right.join(" ");
+										console.log("After:");
+										console.log(expression);
+										console.log("Recalculating loops...");
+										i=-1;
+										extendExpression(newLine);
+									}else if (expression[i-1] === "+"){
+										console.log("Negative number found... Making correction...");
+										console.log("Before:");
+										console.log(expression);
+										expression.splice(i-1, 2, "-");
+										newLine = "<br> = " + left.join(" ") + expression.join(" ") + right.join(" ");
+										console.log("After:");
+										console.log(expression);
+										console.log("Recalculating loops...");
+										i=-1;
+										extendExpression(newLine);
+									}else if (i === 0 || expression[i-1] === "*" || expression[i-1] === "/" || expression[i-1] === "^" || expression[i-1] === "(" || expression[i-1] === ")"){
+										console.log("Negative number found... Making correction...");
+										console.log("Before:");
+										console.log(expression);
+										var newVal = expression[i+1];
+										newVal = -1 * newVal;
+										expression.splice(i, 2, newVal);
+										newLine = "<br> = " + left.join(" ") + expression.join(" ") + right.join(" ");
+										console.log("After:");
+										console.log(expression);
+										console.log("Recalculating loops...");
+										i=-1;
+										extendExpression(newLine);
+									}
+								}
+								
 								
 							}
-							if (expression[i] == "/"){
-								var a = parseFloat(expression[i-1]);
-								var b = parseFloat(expression[i+1]);
-								var quotient = a/b;
-								expression.splice(i-1, 3, quotient);
-								newLine = "<br> = [" + expression.join(" ") + "]";
-								extendExpression(newLine);
-								i = 0;
+
+							//Part 2.1: Evaluate exponents
+							console.log("Calculating exponents");
+							for(var i=0; i<expression.length; i++){
+								var loopNum = i+1;
+								console.log("Loop # " + loopNum + " out of " + expression.length);
+								if (expression[i] == "^"){
+									var a = parseFloat(expression[i-1]);
+									var b = parseFloat(expression[i+1]);
+									console.log("Exponent found:");
+									console.log("Calculating " + a + "^" + b);
+									console.log("Before:");
+									console.log(expression);
+									var answer = Math.pow(a, b);
+									expression.splice(i-1, 3, answer);
+									newLine = "<br> = " + left.join(" ") + expression.join(" ") + right.join(" ");
+									console.log("After:");
+									console.log(expression);
+									console.log("Recalculating loops...");
+									extendExpression(newLine);
+									i = -1;
+
+								}
 							}
+							console.log("Finished calculating exponents.");
+							console.log(expression);
+
+							//Part 2.2 Evaluate multiplication and Division
+							console.log("Calculating multiplication and division: ");
+							for(var i=0; i<expression.length; i++){
+								var loopNum = i+1;
+								console.log("Loop # " + loopNum + " out of " + expression.length);
+								if (expression[i] == "*"){
+									var a = parseFloat(expression[i-1]);
+									var b = parseFloat(expression[i+1]);
+									if (Number.isNaN(a) === false && Number.isNaN(b) === false){
+										console.log("Multiplication found:");
+										console.log("Calculating " + a + "*" + b);
+										console.log("Before:");
+										console.log(expression);
+										var product = a*b;
+										expression.splice(i-1, 3, product);
+										newLine = "<br> = " + left.join(" ") + expression.join(" ") + right.join(" ");
+										console.log("After:");
+										console.log(expression);
+										console.log("Recalculating loops...");
+										i = -1;
+										extendExpression(newLine);
+									}
+								}
+								if (expression[i] == "/"){
+									var a = parseFloat(expression[i-1]);
+									var b = parseFloat(expression[i+1]);
+									if (Number.isNaN(a) === false && Number.isNaN(b) === false){
+										console.log("Division found:");
+										console.log("Calculating " + a + "/" + b);
+										console.log("Before:");
+										console.log(expression);
+										var quotient = a/b;
+										expression.splice(i-1, 3, quotient);
+										newLine = "<br> = " + left.join(" ") + expression.join(" ") + right.join(" ");
+										console.log("After:");
+										console.log(expression);
+										console.log("Recalculating loops...");
+										i = 0;
+										extendExpression(newLine);
+									}
+								}
+							}
+							console.log("Finished calculating multiplication and division");
+							console.log(expression);
+
+							//Part 2.3: Evaluate addition and subtraction
+							console.log("Calculating addition and subtraction: ");
+							for(var i=0; i<expression.length; i++){
+								var loopNum = i+1;
+								console.log("Loop # " + loopNum + " out of " + expression.length);
+								if (expression[i] == "+"){
+									var a = parseFloat(expression[i-1]);
+									var b = parseFloat(expression[i+1]);
+									if (Number.isNaN(a) === false && Number.isNaN(b) === false){
+										console.log("Addition found:");
+										console.log("Calculating " + a + "+" + b);
+										console.log("Before:");
+										console.log(expression);
+										var sum = a+b;
+										expression.splice(i-1, 3, sum);
+										newLine = "<br> = " + left.join(" ") + expression.join(" ") + right.join(" ");
+										console.log("After:");
+										console.log(expression);
+										console.log("Recalculating loops...");
+										i = -1;
+										extendExpression(newLine);
+									}
+								}
+								if (expression[i] == "-"){
+									var a = parseFloat(expression[i-1]);
+									var b = parseFloat(expression[i+1]);
+									if (Number.isNaN(a) === false && Number.isNaN(b) === false){
+										console.log("Subtraction found:");
+										console.log("Calculating " + a + "-" + b);
+										console.log("Before:");
+										console.log(expression);
+										var difference = a-b;
+										expression.splice(i-1, 3, difference);
+										newLine = "<br> = " + left.join(" ") + expression.join(" ") + right.join(" ");
+										console.log("After:");
+										console.log(expression);
+										console.log("Recalculating loops...");
+										i = -1;
+										extendExpression(newLine);
+									}
+								}
+							}
+							console.log("Finished calculating addition and subtraction");
+							console.log(expression);
+							return expression;
 						}
-						console.log(expression);
-						
-						//Part 2.3: Evaluate addition and subtraction
-						for(var i=0; i<expression.length; i++){
-							if (expression[i] == "+"){
-								var a = parseFloat(expression[i-1]);
-								var b = parseFloat(expression[i+1]);
-								console.log(a,b);
-								var sum = a+b;
-								expression.splice(i-1, 3, sum);
-								newLine = "<br> = [" + expression.join(" ") + "]";
-								extendExpression(newLine);
-								i = 0;
-							}
-							if (expression[i] == "-"){
-								var a = parseFloat(expression[i-1]);
-								var b = parseFloat(expression[i+1]);
-								var difference = a-b;
-								expression.splice(i-1, 3, difference);
-								newLine = "<br> = [" + expression.join(" ") + "]";
-								extendExpression(newLine);
-								i = 0;
-							}
-						}
-						return finalAnswer;
 					}
+						
 					
 					
 					
@@ -208,7 +448,7 @@
 				
 				<section class="bluebox" id="top">
 					<h1 style="text-align:center;">Alex Sconzo | Projects</h1>
-					<p><i><a href = "../homepage.html">Home</a> > <a href="../projects.html">Projects</a> > <a href="./index.html">Javascript learning</a> > </i> <strong>Javascript Calculator</strong></p>
+					<p><i><a href = "../homepage.html">Home</a> > <a href="../projects.html">Projects</a> > </i> <strong>Javascript Calculator</strong></p>
 					<hr>
 					<div>
 						<h2>Javascript Calculator</h2>
@@ -254,12 +494,12 @@
 							<button type="button" onclick="extendExpression('5')">5</button>
 							<button type="button" onclick="extendExpression('6')">6</button>
 							<button type="button" onclick="extendExpression('-')">-</button>
-							<button style="cursor: not-allowed" type="button" onclick="extendExpression('(')">(</button>
+							<button type="button" onclick="extendExpression('(')">(</button>
 							<button type="button" onclick="extendExpression('7')">7</button>
 							<button type="button" onclick="extendExpression('8')">8</button>
 							<button type="button" onclick="extendExpression('9')">9</button>
 							<button type="button" onclick="extendExpression('*')">*</button>
-							<button style="cursor:not-allowed" type="button" onclick="extendExpression(')')">)</button>
+							<button type="button" onclick="extendExpression(')')">)</button>
 							<button type="button" id="clear" style="background-color:indianred"
 									onclick="resetExpression()">C</button>
 							<button type="button" onclick="extendExpression('0')">0</button>
@@ -271,23 +511,9 @@
 							
 					</div>
 					<p>
-						This is a simple calculator programmed in Javascript.
+						This is a simple calculator programmed in Javascript. See my <a href = "#">Blog Post</a> where I write about it!<br>
+						This calculator is feature-complete. It can add, subtract, multiply, divide, and calculate exponents. It can even calculate parentheticals, which I am very proud of. The program uses recursion to step down inside the parentheses and retrieve the answer. Give it a try!
 					</p>
-					<ul>Finished:
-						<li>Build the layout and make it pretty</li>
-						<li>Make the buttons print to the solution box</li>
-						<li>Make subsequent integer button presses append value to previous int instead adding a new block to the main array</li>
-					</ul>
-					<ul>To do:
-						<li>Finish programming the decimal button. It doesn't play nice with the 0 button currently.</li>
-						<li>Implement the equals button</li>
-						<li>Implement the basic operators</li>
-						<li>Implement parentheticals</li>
-						<li>Implement the show work functions</li>
-						<li>Add code section to the page to display my javascript logic</li>
-					</ul>
-					
-					
 					
 				</section>
 			</div>
