@@ -1,6 +1,11 @@
 var expressionString = "";
+var solved = false;
 
 function extendExpression(currentItem) {
+    if (solved){
+        solved = false;
+        resetExpression(currentItem);
+    }
     expressionString = expressionString + currentItem;
     document.getElementById("calcSpace").innerHTML = expressionString;
 }
@@ -10,9 +15,9 @@ function updateLine(expression, left, right){
     extendExpression(newLine);
 }
 
-function resetExpression(){
+function resetExpression(input){
     expressionString = "";
-    document.getElementById("calcSpace").innerHTML = "Use the buttons below to enter your commands!";
+    document.getElementById("calcSpace").innerHTML = input;
     left = [];
     right = [];
     expression = [];
@@ -20,7 +25,7 @@ function resetExpression(){
 
 function isOperator(operator){
     var operatorList = ["+", "-", "/", "*", "^"];
-    return operatorlist.includes(operator);
+    return operatorList.includes(operator);
 }
 
 function isDigit(character) {
@@ -53,110 +58,156 @@ function stringToExpression(stringInput){
 }
 
 function evaluateExpression(expression, left, right){
-updateLine(expression, left, right);
-console.log("Input array:");
-console.log(expression);
-    
-//Part 1: Process parentheticals
-//Part 1.1: Add multiplication signs before and after parentheticals
-addMultiplications(expression, left, right);
-        
-//Part 1.2: Do the math inside parentheticals
-processParentheticals(expression, left, right);						
-//Part 2: Evaluate math
-        
-//Part 2.0: Check for negative numbers
-// -(5+1) --> (-1)*(5+1)
-adjustNegatives(expression, left, right);
-    
-//Part 2.1: Evaluate exponents
-console.log("Calculating exponents");
-evaluateOperation(expression, ["^"], [exponentiation], left, right);
-console.log("Finished calculating exponents.");
+    if (solved){
+        return;
+    }
+    updateLine(expression, left, right);
 
-//Part 2.2 Evaluate multiplication and Division
-console.log("Calculating multiplication and division: ");
-evaluateOperation(expression, ["*","/"], [multiplication, division], left, right);
-console.log("Finished calculating multiplication and division");
+    //Part 1: Process parentheticals
+    //Part 1.1: Add multiplication signs before and after parentheticals
+    addMultiplications(expression, left, right);
+            
+    //Part 1.2: Check for errors with parenthetical input
+    //end the process if error exists
+    if(errorCheck(expression,left,right,mismatchedParentheses)){
+        solved = true;
+        return;
+    }
+    //Part 1.3: Process math inside parentheticals
+    processParentheticals(expression, left, right);	
 
-//Part 2.3: Evaluate addition and subtraction
-console.log("Calculating addition and subtraction: ");
-evaluateOperation(expression, ["+","-"], [addition, subtraction], left, right);
-console.log("Finished calculating addition and subtraction");
-return expression; 
+    //Part 2: Evaluate math            
+    //Part 2.0: Check for negative numbers
+    adjustNegatives(expression, left, right);
+
+    //Part 2.0.1: Check for errors in input, end the process if an error exists
+    if(errorCheck(expression, left, right, leadingOrTrailing)
+        || errorCheck(expression, left, right, multipleOperators)){
+        solved = true;
+        return;
+    }
+        
+    //Part 2.1: Evaluate exponents
+    evaluateOperation(expression, ["^"], [exponentiation], left, right);
+
+    //Part 2.2 Evaluate multiplication and Division
+    evaluateOperation(expression, ["*","/"], [multiplication, division], left, right);
+
+    //Part 2.3: Evaluate addition and subtraction
+    evaluateOperation(expression, ["+","-"], [addition, subtraction], left, right);
+    solved = true;
+    return expression; 
 }
 
+function errorCheck(expression, left, right, errorFunction){
+    //Check for operators at index 0 and index -1
+    if(errorFunction(expression, left, right)){
+        return true;
+    }else{
+        return false;
+    }    
+}
+
+function updateError(errorString){
+    errorArray = [];
+    errorArray.push("Error: " + errorString);
+    updateLine(errorArray,[],[]);
+}
+
+function leadingOrTrailing(expression, left, right){
+    var operatorList = ["+", "-", "/", "*", "^"];
+    var leadingOp = operatorList.includes(expression[0]);
+    var trailingOp = operatorList.includes(expression[expression.length-1]);
+    if (leadingOp || trailingOp){
+        updateError("You have left an operator in either the first or last position in the expression.");
+        return true;
+    }
+    return false;
+}
+
+function multipleOperators(expression, left, right){
+    for (var i=0; i<expression.length;i++){
+        if(isOperator(expression[i]) && isOperator(expression[i+1])){
+            updateError("You have two or more operators in a row.");
+            return true;
+        }
+    }
+    return false;
+}
+
+function mismatchedParentheses(expression, left, right){
+    if(expression[0] === ")"){
+        updateError("You have a mismatched parenthesis.");
+        return true;
+    }
+    if(expression[expression.length-1] === "("){
+        updateError("You have a mismatched parenthesis.");
+        return true;
+    }
+    var leftParenCount = 0;
+    var rightParenCount = 0;
+    for (i=0; i<expression.length; i++){
+        if (expression[i] === "("){
+            leftParenCount++;
+        }else if (expression[i] === ")"){
+            rightParenCount++;
+        }
+    }
+    if (leftParenCount != rightParenCount){
+        updateError("You have a mismatched parenthesis.");
+        return true;
+    }
+    var leftParenIndex = expression.indexOf("("); 
+    var rightParenIndex= expression.indexOf(")");
+    if (rightParenIndex < leftParenIndex){
+        updateError("You have a mismatched parenthesis");
+        return true;
+    }
+
+    return false;
+}
 function addMultiplications(expression,left, right){
-    console.log("Adding multiplication signs around parentheticals");
     for (var i=0; i<expression.length; i++){
-        if (i>0 && expression[i] === "(" && !isOperator(expression[i-1])){
-            console.log(expression);
+        if (i>0 && expression[i] === "(" && !isOperator(expression[i-1]) && expression[i-1] != "("){
             expression.splice(i, 0, "*");
-            console.log(expression);
             i=-1;
             updateLine(expression, left, right);
             continue;
         }
-        if (i<expression.length-1 && expression[i] === ")" && !isOperator(expression[i+1])){
-            console.log(expression);
+        if (i<expression.length-1 && expression[i] === ")" && !isOperator(expression[i+1]) && expression[i+1] != ")"){
             expression.splice(i+1, 0, "*");
-            console.log(expression);
             i=-1;
             updateLine(expression, left, right);
             continue;
         }
         if (i<expression.length-1 && expression[i] === ")" && expression[i+1] === "("){
-            console.log(expression);
             expression.splice(i+1, 0, "*");
-            console.log(expression);
             i=-1;
             updateLine(expression, left, right);
             continue;
         }
     }
-    console.log("Finished adding multiplication signs around parentheticals.");
-    console.log(expression);
 }
 
 function processParentheticals(expression, left, right){
-    console.log("Processing math inside the parentheticals:");
     while (expression.lastIndexOf("(") != -1){
-        //var loopNum = i+1;
-        //console.log("Loop # " + loopNum + " out of " + expression.length);
-        //Locate indexes of left and right parentheticals. Will be -1 if there is none
         var leftParenIndex = expression.lastIndexOf("("); 
         var rightParenIndex= expression.indexOf(")", leftParenIndex);
         if (leftParenIndex != -1){
-            console.log("Section contained within parentheticals found.");
             var removalLength = rightParenIndex - leftParenIndex + 1;
             var parentheticalExpression = expression.slice(leftParenIndex + 1, rightParenIndex);
             var leftArray = expression.slice(0, leftParenIndex+1);
-            console.log("Left array: " + leftArray);
             var rightArray = expression.slice(rightParenIndex);
-            console.log("Right array: " + rightArray);
-            console.log("Middle array: " + parentheticalExpression);
-            console.log("Solving parenthetical section");
-            console.log("Before:");
-            console.log(parentheticalExpression);
             var newArray = evaluateExpression(parentheticalExpression, leftArray, rightArray);
-            console.log("Parenthetical section solved.");
-            console.log("After:");
-            console.log(newArray);
-            console.log("Replacing old parenthetical section with answer.");
-            console.log("Before:");
-            console.log(expression);
             expression.splice(leftParenIndex,removalLength, newArray[0]);
             left = [];
             right = [];
             updateLine(expression, left, right);
-            console.log("After:");
-            console.log(expression);
         }
     }
 }
 
 function adjustNegatives(expression, left, right){
-    console.log("Checking for the input of negative numbers");
     // If expression[0] is "-", and expression[1] is a number, make expression[1] negative
     if (expression[0] == "-" && !isOperator(expression[1])){
         var negatedNum = expression[1]*-1;
@@ -182,10 +233,8 @@ function evaluateOperation(expression, operators, operatorFunctions, left, right
                 var a = expression[i-1];
                 var b = expression[i+1];
                 var answer = operatorFunctions[j](a,b);
-                console.log(a + operators[j] + b + "=" + answer); 
                 expression.splice(i-1,3,answer);
                 updateLine(expression, left, right);
-                console.log(expression);
                 i = -1;
                 break;
             }
@@ -208,6 +257,3 @@ function division(a,b){
 function exponentiation(a,b){
     return Math.pow(a, b);
 }
-
-//To-Do: add error for open parentheses, 
-//clear output when continuing after already having solved an equation
