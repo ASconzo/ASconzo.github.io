@@ -50,6 +50,7 @@ body {
 	color: gold;
 	width: 94px;
 	resize: none;
+	float: none;
 	
 }
 
@@ -58,6 +59,7 @@ body {
 	background-color:#fff7cc;
 	font-weight: 900;
 	transition: 0.3s;
+	resize: none;
 }
 
 .sidenav a:active{

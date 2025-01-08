@@ -152,18 +152,12 @@ function mismatchedParentheses(expression, left, right){
         }else if (expression[i] === ")"){
             rightParenCount++;
         }
+        if (rightParenCount > leftParenCount){
+            updateError("You have a mismatched parenthesis.");
+            return true;
+        }
     }
-    if (leftParenCount != rightParenCount){
-        updateError("You have a mismatched parenthesis.");
-        return true;
-    }
-    var leftParenIndex = expression.indexOf("("); 
-    var rightParenIndex= expression.indexOf(")");
-    if (rightParenIndex < leftParenIndex){
-        updateError("You have a mismatched parenthesis");
-        return true;
-    }
-
+    
     return false;
 }
 function addMultiplications(expression,left, right){

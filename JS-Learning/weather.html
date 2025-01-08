@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Alex Sconzo | Projects</title>
+		<link rel="stylesheet" href="../styles.css" />
+		<meta charset="UTF-8">
+		<link rel="icon" type="image/x-icon" href="../favicon.ico">
+	</head>
+
+	<body>
+
+		<div class="wrap">
+			<div class="sidenav">
+				<a href = "../index.html">
+					<figure class="figure">
+						<img src="../pictures/Win2k-MyComputer.png" alt="Home Icon" style="max-width:64px">
+						<figcaption>Home</figcaption>
+					</figure>
+				</a>
+				<a href = "../news.html">
+					<figure class="figure">
+						<img src="../pictures/Win2k-Internet.png" alt="News Icon" style="max-width:64px">
+						<figcaption>News</figcaption>
+					</figure>
+				</a>
+				<a href = "../about.html">
+					<figure class="figure">
+						<img src="../pictures/Win2k-About.png" alt="About Icon" style="max-width:64px">
+						<figcaption>About</figcaption>
+					</figure>
+				</a>
+				<a href = "../projects.html">
+					<figure class="figure">
+						<img src="../pictures/Win2k-Paint.png" alt="Projects Icon" style="max-width:64px">
+						<figcaption>Projects</figcaption>
+					</figure>
+				</a>
+				<a href = "../blog.html">
+					<figure class="figure">
+						<img src="../pictures/Win2k-Notepad.png" alt="Blog Icon" style="max-width:64px">
+						<figcaption>Blog</figcaption>
+					</figure>
+				</a>
+			</div>
+
+			<div class="main">
+				<section class="bluebox" id="top">
+					<h1 style="text-align:center;">Alex Sconzo | Projects</h1>
+					<p><i><a href = "../homepage.html">Home</a> > <a href="../projects.html">Projects</a>
+						 > </i> <strong>Weather Forecast</strong></p>
+					<hr>
+					<div>
+						<h2>Weather Forecast</h2>
+						<hr>
+						<style>
+							.weatherContainer, .weatherChild, .cityChild, .innerContainer, .cityDetails{
+								display: flex;
+								flex-direction: column;
+								background-color: rgb(0, 163, 225);
+								border: ridge gold;
+								padding: 10px;
+								gap: 10px;
+								color: inherit;
+								flex-grow: 1;
+								text-align:center;
+								font-size: 30px;
+							}
+							.innerContainer{
+								flex-direction: row;
+								border: none;
+							}
+							.weatherChild, .cityDetails{
+								background-color: rgb(0,103,165);
+							}
+							#cityName, #curTime, #curTemp,#curConditions,#curRain,#curWind,#curAlerts{
+								background-color: rgb(0,103,165);
+								font-size: 15px;
+								border: none;
+								gap: 0px;
+								padding:5px;
+								text-align: left;
+							}
+							.cityDetails{
+								justify-content: space-evenly;
+								align-items: stretch;
+								gap: 0px;
+							}
+							#search{
+								display: flex;
+								flex-direction: row;
+								justify-content:flex-end;
+								align-content: stretch;
+							}
+							input, button{
+								text-align: left;
+								color: black;
+								font-size: 20px;
+								border: ridge gold;
+							}
+							input{
+								background-color: white;
+								flex-grow: 1;
+							}
+							button{
+								background-color: #fff7cc;
+							}
+							button:active{
+								background-color: gold;
+								border: inset gold;
+							}
+							
+						</style>
+
+						<script src="weatherFunctions.js">
+						</script>
+
+						<div class="weatherContainer">
+							<div class="innerContainer">
+								<div class ="weatherChild" style="flex-grow: 0.5;">icon</div>
+								<div class="cityDetails">
+									<div id="search">
+										<input type="text" id="searchBox" placeholder="Enter city name">
+										<button type="button" id="searchButton" onclick="updateCurrentConditions()">&#128269; Search</button>
+									</div>
+									<div id="cityName" style="font-size:20px">City Name</div>
+									<div id="curTime">Current Time</div>
+									<div id="curTemp">Temp in F and C</div>
+									<div id="curConditions">Current conditions</div>
+									<div id="curRain">precipitation</div>
+									<div id="curWind">Wind</div>
+									<div id="curAlerts" style="background-color:indianred">No current alerts</div>
+								</div>
+							</div>
+							<div class="innerContainer">
+								<div class="weatherChild" style="font-size: 15px;">
+									<div id="tomorrowIcon"><img src="./weather-icons/placeholder.png" alt="A placeholder image for a weather icon"></img></div>
+									<div id="tomorrowDetails">1st Day details</div>
+								</div>
+								<div class="weatherChild" style="font-size: 15px;">
+									<div id="dayTwoIcon"><img src="./weather-icons/placeholder.png" alt="A placeholder image for a weather icon"></img></div>
+									<div id="dayTwoDetails">1st Day details</div>
+								</div>
+								<div class="weatherChild" style="font-size: 15px;">
+									<div id="dayThreeIcon"><img src="./weather-icons/placeholder.png" alt="A placeholder image for a weather icon"></img></div>
+									<div id="dayThreeDetails">1st Day details</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</section>
+			</div>
+
+			<div style = "width: 160px;"><!-- I'm empty!, I exist to space out the flexbox more evenly --></div>
+
+		</div>
+
+		<br><br><br>
+		<section class="bluebox">
+			<p style="text-align:center"><i>All images retrieved from the Internet. I do not claim ownership over any images used on this page. Rights are reserved by their respective owners. Content written by me, 2024</i></p>
+		</section>
+	</body>
+</html>
