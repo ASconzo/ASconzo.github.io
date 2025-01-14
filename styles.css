@@ -39,9 +39,11 @@ body {
 	background-color:rgb(0,103,165);
 	border: ridge gold;
 	padding-top:20px;
+	padding-bottom: 20px;
 	margin-right:10px;
 	color:white;
 	resize: none;
+
 }
 
 .sidenav a{
@@ -51,7 +53,6 @@ body {
 	width: 94px;
 	resize: none;
 	float: none;
-	
 }
 
 .sidenav a:hover{
@@ -66,6 +67,9 @@ body {
 	background-color:gold;
 	transition: 0s;
 }
+.sidenav figure{
+	max-width: 68px;
+}
 
 .figure {
 	background-color:inherit;
@@ -74,9 +78,9 @@ body {
 	float:right;
 	padding:10px;
 	margin:10px;
-	text-align:center;
 	color: inherit;
 	resize: none;
+	text-align: center;
 }
 
 .figure a{

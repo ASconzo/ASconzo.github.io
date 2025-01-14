@@ -72,13 +72,16 @@
 							.weatherChild, .cityDetails{
 								background-color: rgb(0,103,165);
 							}
-							#cityName, #curTime, #curTemp,#curConditions,#curRain,#curWind,#curAlerts{
+							.forecastDetails, .futureforecast{
 								background-color: rgb(0,103,165);
 								font-size: 15px;
 								border: none;
 								gap: 0px;
 								padding:5px;
 								text-align: left;
+							}
+							.futureforecast{
+								padding:0px;
 							}
 							.cityDetails{
 								justify-content: space-evenly;
@@ -116,36 +119,49 @@
 
 						<div class="weatherContainer">
 							<div class="innerContainer">
-								<div class ="weatherChild" style="flex-grow: 0.5;">icon</div>
-								<div class="cityDetails">
+								<div class="cityDetails" id="today">
 									<div id="search">
 										<input type="text" id="searchBox" placeholder="Enter city name">
 										<button type="button" id="searchButton" onclick="updateCurrentConditions()">&#128269; Search</button>
 									</div>
-									<div id="cityName" style="font-size:20px">City Name</div>
-									<div id="curTime">Current Time</div>
-									<div id="curTemp">Temp in F and C</div>
-									<div id="curConditions">Current conditions</div>
-									<div id="curRain">precipitation</div>
-									<div id="curWind">Wind</div>
-									<div id="curAlerts" style="background-color:indianred">No current alerts</div>
+									<div class="forecastDetails" id="cityName" style="font-size:20px">City Name</div>
+									<div class="forecastDetails" id="curTime">Current Time</div>
+									<div class="forecastDetails" id="curTemp">Temp in F and C</div>
+									<div class="forecastDetails" id="max">Mins and maxs in F and C</div>
+									<div class="forecastDetails" id="min">Mins and maxs in F and C</div>
+									<div class="forecastDetails" id="curConditions">Current conditions and humidity</div>
+									<div class="forecastDetails" id="curRain">Precipitation in inches</div>
+									<div class="forecastDetails" id="curWind">Wind Conditions</div>
+									<div class="forecastDetails" id="sunrise">Time of sunrise</div>
+									<div class="forecastDetails" id="sunset">Time of sunset</div>
 								</div>
 							</div>
 							<div class="innerContainer">
-								<div class="weatherChild" style="font-size: 15px;">
-									<div id="tomorrowIcon"><img src="./weather-icons/placeholder.png" alt="A placeholder image for a weather icon"></img></div>
-									<div id="tomorrowDetails">1st Day details</div>
+								<div class="weatherChild" id="tomorrow" style="font-size: 15px;">
+									<div class="futureforecast" id="tomorrowDate">Tomorrow's Date</div>
+									<div class="futureforecast" id="tomorrowAvg">Average temperature in F and C</div>
+									<div class="futureforecast" id="tomorrowConditions">Conditions and humidity</div>
+									<div class="futureforecast" id="tomorrowMax">Mins and maxs in F and C</div>
+									<div class="futureforecast" id="tomorrowMin">Mins and maxs in F and C</div>
+									<div class="futureforecast" id="tomorrowPrecipitation">Precipitation in inches</div>
+									<div class="futureforecast" id="tomorrowWind">Wind conditions</div>
+									<div class="futureforecast" id="tomorrowSunrise">Time of sunrise</div>
+									<div class="futureforecast" id="tomorrowSunset">Time of sunset</div>
 								</div>
-								<div class="weatherChild" style="font-size: 15px;">
-									<div id="dayTwoIcon"><img src="./weather-icons/placeholder.png" alt="A placeholder image for a weather icon"></img></div>
-									<div id="dayTwoDetails">1st Day details</div>
-								</div>
-								<div class="weatherChild" style="font-size: 15px;">
-									<div id="dayThreeIcon"><img src="./weather-icons/placeholder.png" alt="A placeholder image for a weather icon"></img></div>
-									<div id="dayThreeDetails">1st Day details</div>
+								<div class="weatherChild" id="nextday" style="font-size: 15px;">
+									<div class="futureforecast" id="nextDate">Tomorrow's Date</div>
+									<div class="futureforecast" id="nextAvg">Average temperature in F and C</div>
+									<div class="futureforecast" id="nextConditions">Conditions and humidity</div>
+									<div class="futureforecast" id="nextMax">Mins and maxs in F and C</div>
+									<div class="futureforecast" id="nextMin">Mins and maxs in F and C</div>
+									<div class="futureforecast" id="nextPrecipitation">Precipitation in inches</div>
+									<div class="futureforecast" id="nextWind">Wind conditions</div>
+									<div class="futureforecast" id="nextSunrise">Time of sunrise</div>
+									<div class="futureforecast" id="nextSunset">Time of sunset</div>
 								</div>
 							</div>
 						</div>
+						<p>Powered by <a href="https://www.weatherapi.com/" title="Free Weather API">WeatherAPI.com</a></p>
 					</div>
 				</section>
 			</div>
