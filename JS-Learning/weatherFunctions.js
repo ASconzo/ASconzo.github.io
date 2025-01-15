@@ -1,4 +1,4 @@
-var url = "http://64.23.161.211:3000";
+var url = "http://64.23.161.211:8080";
 
 function updateCurrentConditions(){
     var inputBox = document.getElementById("searchBox");
